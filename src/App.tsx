@@ -1,18 +1,37 @@
-import React from 'react';
-import {ToDoListItem} from './TodoList/ToDoListItem';
+import React, { useState } from 'react';
+import { AddToDoForm } from './TodoList/AddToDoForm';
+import { ToDoList } from './TodoList/ToDoList';
 
-const todos:Array<Todo>=[
-  { text:"walk a dog",complete:false},
-  { text:"playing cricket",complete:true},
+const initialTodos:Array<Todo>=[];
 
-];
 
 
 const App:React.FC=()=>{
+
+  const [todos,setToDos]=useState(initialTodos)
+  
+
+  const toggleTodo:ToggleTodo=(selectedTodo)=>{
+     
+
+        const newTodos=[...todos];
+        let index=newTodos.findIndex(todo=>todo.text===selectedTodo.text);
+        let todo=newTodos[index];
+        todo.complete=true;
+         setToDos(newTodos);
+        newTodos.splice(index,1);
+        setToDos(newTodos);
+      
+}
+
+  const addTodo:AddTodo=newTodo=>{
+    newTodo.trim()!=="" && setToDos([...todos,{text:newTodo,complete:false}])
+  }
+
   return(
         <React.Fragment> 
-             <ToDoListItem todo={todos[0]}/>
-             <ToDoListItem todo={todos[1]}/>
+             <ToDoList todos={todos} toggleTodo={toggleTodo}/>
+             <AddToDoForm addToDo={addTodo}/>
       </React.Fragment>
   
 )}
